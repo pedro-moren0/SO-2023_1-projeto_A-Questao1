@@ -7,6 +7,7 @@
 #define INVALID_PROCESS_NAME "INVALID PROCESS NAME"
 #define INVALID_PROCESS_BURST -1
 #define INVALID_PROCESS_PRIORITY -1
+#define INVALID_PROCESS_ARRIVAL_TIME -1
 
 
 typedef struct tProcess
@@ -14,6 +15,7 @@ typedef struct tProcess
     char name[PROCESS_NAME_MAXIMUM_LENGTH];
     int cpu_burst;
     int priority;
+    int arrival;
 } Process;
 
 

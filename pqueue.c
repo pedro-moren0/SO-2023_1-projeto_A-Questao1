@@ -32,12 +32,13 @@ pqueue_t * create_empty_pqueue(int priority)
     return q;
 }
 
-item_t * create_item(char* name, int burst, int priority)
+item_t * create_item(char* name, int burst, int priority, int arrival)
 {
     item_t *item = malloc(sizeof(item_t));
     strcpy(item->proc.name, name);
     item->proc.cpu_burst = burst;
     item->proc.priority = priority;
+    item->proc.arrival = arrival;
     item->next = NULL;
 
     return item;
@@ -74,12 +75,11 @@ void print_pqueue(pqueue_t *q)
         print_proc(tmp->proc);
         tmp = tmp->next;
     }
-    printf("\n");
 }
 
 void enqueue(pqueue_t *q, Process p)
 {
-    item_t *novo = create_item(p.name, p.cpu_burst, p.priority);
+    item_t *novo = create_item(p.name, p.cpu_burst, p.priority, p.arrival);
     if(is_empty(q))
     {
         q->start = novo;
@@ -105,7 +105,8 @@ Process dequeue(pqueue_t *q)
     Process invalid = {
         .name = INVALID_PROCESS_NAME,
         .cpu_burst = INVALID_PROCESS_BURST,
-        .priority = INVALID_PROCESS_PRIORITY
+        .priority = INVALID_PROCESS_PRIORITY,
+        .arrival = INVALID_PROCESS_ARRIVAL_TIME
     };
     return invalid;
 }

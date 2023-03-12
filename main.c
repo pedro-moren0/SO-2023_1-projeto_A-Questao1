@@ -1,38 +1,52 @@
 #include <stdio.h>
 
+#include "mqp.h"
 #include "pqueue.h"
 #include "process.h"
 
 int main(int argc, char const *argv[])
 {
-    /*
-    Process p = {
-        .name = "Paint",
-        .cpu_burst = 10,
-        .priority = 1
+    Pqueue mqp[NUMBER_OF_PRIORITY_LEVELS];
+    for (int i = 0; i < NUMBER_OF_PRIORITY_LEVELS; i++)
+    {
+        mqp[i] = create_empty_pqueue(i);
+    }
+    
+    Process procs[] = {
+        {
+            .name = "Paint",
+            .cpu_burst = 1,
+            .priority = 2,
+            .arrival = 0
+        },
+        {
+            .name = "Meujoguinho",
+            .cpu_burst = 190,
+            .priority = 0,
+            .arrival = 0
+        },
+        {
+            .name = "Firefox",
+            .cpu_burst = 20,
+            .priority = 0,
+            .arrival = 0
+        }
     };
-    print_proc(p);
-    */
-   
-    Pqueue f = create_empty_pqueue(1);
-    enqueue(f, (Process){"Paint", 1, 2});
-    enqueue(f, (Process){"Meujoguinho", 190, 0});
-    enqueue(f, (Process){"Firefox", 20, 0});
-    print_pqueue(f);
-    print_proc(dequeue(f));
-    printf("\n");
-    //enqueue(f, (Process){"my_prog", 5, 3});
-    print_pqueue(f);
-    print_proc(dequeue(f));
-    printf("\n");
-    print_proc(dequeue(f));
-    printf("\n");
-    print_proc(dequeue(f));
-    printf("\n");
-    print_proc(dequeue(f));
-    printf("\n");
-    print_proc(dequeue(f));
-    printf("\n");
-    free_pqueue(f);
+
+    receive_procs(procs, 3, mqp);
+
+    for (int i = 0; i < NUMBER_OF_PRIORITY_LEVELS; i++)
+    {
+        print_pqueue(mqp[i]);
+        printf("\n");
+    }
+    
+    in_cpu = dequeue(mqp[0]);
+    print_running_now();
+    
+    for (int i = 0; i < NUMBER_OF_PRIORITY_LEVELS; i++)
+    {
+        print_pqueue(mqp[i]);
+    }
     return 0;
 }
