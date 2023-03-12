@@ -15,11 +15,11 @@ typedef struct tProcess
     char name[PROCESS_NAME_MAXIMUM_LENGTH];
     int cpu_burst;
     int priority;
-    int arrival;
+    int waiting_time;
 } Process;
 
 
 void print_proc(Process p);
-
+void insertion_sort_by_cpu_burst(Process procs[], int procs_len);
 
 #endif
