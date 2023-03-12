@@ -1,14 +1,14 @@
 #Lazy makefile
+PROJ_NAME=mqp_scheduler
+C_SOURCE=$(wildcard *.c)
+OBJS=$(C_SOURCE: .c =.o)
 CC=gcc
-CFLAGS=-Wall
-OBJS= main.o pqueue.o process.o mqp.o
+CC_FLAGS=-Wall
 
-main: $(OBJS)
+all: $(PROJ_NAME)
 
-$(OBJS): %.o: %.c
+$(PROJ_NAME): $(OBJS)
+	$(CC) -o $@ $^
 
-main.c:
-	echo "int main() { return 0; }" > main.c
-
-%.c:
-	touch $@
+%.o: %.c
+	$(CC) -c $@ $< $(CC_FLAGS)
