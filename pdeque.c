@@ -3,7 +3,7 @@
 #include <string.h>
 
 
-#include "pqueue.h"
+#include "pdeque.h"
 #include "process.h"
 
 
@@ -13,17 +13,17 @@ typedef struct item_t
     struct item_t *next;
 } item_t;
 
-typedef struct pqueue_t
+typedef struct pdeque_t
 {
     int priority;
     item_t *start, *end;
-} pqueue_t;
+} pdeque_t;
 
 
 
-pqueue_t * create_empty_pqueue(int priority)
+pdeque_t * create_empty_pdeque(int priority)
 {
-    pqueue_t *q = malloc(sizeof(pqueue_t));
+    pdeque_t *q = malloc(sizeof(pdeque_t));
 
     q->priority = priority;
     q->start = NULL;
@@ -32,19 +32,19 @@ pqueue_t * create_empty_pqueue(int priority)
     return q;
 }
 
-item_t * create_item(char* name, int burst, int priority, int arrival)
+item_t * create_item(char* name, int burst, int priority, int waiting_time)
 {
     item_t *item = malloc(sizeof(item_t));
     strcpy(item->proc.name, name);
     item->proc.cpu_burst = burst;
     item->proc.priority = priority;
-    item->proc.arrival = arrival;
+    item->proc.waiting_time = waiting_time;
     item->next = NULL;
 
     return item;
 }
 
-void free_pqueue(pqueue_t *q)
+void free_pdeque(pdeque_t *q)
 {
     item_t *current = q->start, *previous = NULL;
     while(current != NULL)
@@ -56,12 +56,12 @@ void free_pqueue(pqueue_t *q)
     free(q);
 }
 
-int is_empty(pqueue_t *q)
+int is_empty(pdeque_t *q)
 {
     return q->start == NULL;
 }
 
-void print_pqueue(pqueue_t *q)
+void print_pdeque(pdeque_t *q)
 {
     item_t *tmp = q->start;
     int empty = is_empty(q);
@@ -77,9 +77,9 @@ void print_pqueue(pqueue_t *q)
     }
 }
 
-void enqueue(pqueue_t *q, Process p)
+void add_to_end(pdeque_t *q, Process p)
 {
-    item_t *novo = create_item(p.name, p.cpu_burst, p.priority, p.arrival);
+    item_t *novo = create_item(p.name, p.cpu_burst, p.priority, p.waiting_time);
     if(is_empty(q))
     {
         q->start = novo;
@@ -92,7 +92,47 @@ void enqueue(pqueue_t *q, Process p)
     }
 }
 
-Process dequeue(pqueue_t *q)
+void add_to_start(pdeque_t *q, Process p) {
+    item_t *novo = create_item(p.name, p.cpu_burst, p.priority, p.waiting_time);
+    if(is_empty(q))
+    {
+        q->start = novo;
+        q->end = novo;
+    }
+    else
+    {
+        novo->next = q->start;
+        q->start = novo;
+    }
+}
+
+Process remove_from_end(pdeque_t *q)
+{
+    if(!is_empty(q))
+    {
+        item_t *tmp = q->start;
+
+        // find penultimate item of queue
+        while (tmp->next->next != NULL)
+        {
+            tmp = tmp->next;
+        }
+        Process p = q->end->proc;
+        free(q->end);
+        tmp->next = NULL;
+        q->end = tmp;
+        return p;
+    }
+    Process invalid = {
+        .name = INVALID_PROCESS_NAME,
+        .cpu_burst = INVALID_PROCESS_BURST,
+        .priority = INVALID_PROCESS_PRIORITY,
+        .waiting_time = INVALID_PROCESS_ARRIVAL_TIME
+    };
+    return invalid;
+}
+
+Process remove_from_start(pdeque_t *q)
 {
     if(!is_empty(q))
     {
@@ -106,7 +146,7 @@ Process dequeue(pqueue_t *q)
         .name = INVALID_PROCESS_NAME,
         .cpu_burst = INVALID_PROCESS_BURST,
         .priority = INVALID_PROCESS_PRIORITY,
-        .arrival = INVALID_PROCESS_ARRIVAL_TIME
+        .waiting_time = INVALID_PROCESS_ARRIVAL_TIME
     };
     return invalid;
 }
