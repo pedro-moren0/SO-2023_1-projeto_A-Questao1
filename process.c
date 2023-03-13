@@ -3,8 +3,8 @@
 #include "process.h"
 
 void print_proc(Process p) {
-    printf("%s, %d, %d - Waiting time: %d\n",
-        p.name, p.priority, p.cpu_burst, p.waiting_time);
+    printf("%s, %d, %d\n",
+        p.name, p.priority, p.cpu_burst);
 }
 
 void insertion_sort_by_cpu_burst(Process procs[], int procs_len) {

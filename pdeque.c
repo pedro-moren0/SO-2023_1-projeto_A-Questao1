@@ -67,7 +67,7 @@ void print_pdeque(pdeque_t *q)
     int empty = is_empty(q);
 
     printf("Queue priority level: %d\n", q->priority);
-    printf("Processes:\n");
+    printf("Processes (Name, Priority, CPU Burst):\n");
     //imprime ate o ultimo item
     while(!empty && tmp != NULL)
     {
