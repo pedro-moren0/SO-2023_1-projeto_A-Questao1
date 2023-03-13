@@ -22,3 +22,13 @@ void insertion_sort_by_cpu_burst(Process procs[], int procs_len) {
         procs[i + 1] = chave;
     }
 }
+
+float avg_waiting_time(Process procs[], int procs_len) {
+    float sum = 0.0;
+    for (int i = 0; i < procs_len; i++)
+    {
+        sum += (float) procs[i].waiting_time;
+    }
+    
+    return sum / (float) procs_len;
+}

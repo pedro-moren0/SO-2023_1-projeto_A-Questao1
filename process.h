@@ -21,5 +21,6 @@ typedef struct tProcess
 
 void print_proc(Process p);
 void insertion_sort_by_cpu_burst(Process procs[], int procs_len);
+float avg_waiting_time(Process procs[], int procs_len);
 
 #endif
