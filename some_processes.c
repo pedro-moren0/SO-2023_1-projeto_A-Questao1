@@ -10,43 +10,43 @@ Process some_processes[] = {
     },
     {
         .name = "Meujoguinho",
-        .cpu_burst = 190,
+        .cpu_burst = 12,
         .priority = 0,
         .waiting_time = 0
     },
     {
         .name = "Firefox",
-        .cpu_burst = 20,
+        .cpu_burst = 6,
         .priority = 0,
         .waiting_time = 0
     },
     {
         .name = "Word",
-        .cpu_burst = 100,
+        .cpu_burst = 8,
         .priority = 1,
         .waiting_time = 0
     },
     {
         .name = "PowerPoint",
-        .cpu_burst = 120,
+        .cpu_burst = 8,
         .priority = 3,
         .waiting_time = 0
     },
     {
         .name = "GIMP",
-        .cpu_burst = 80,
+        .cpu_burst = 5,
         .priority = 3,
         .waiting_time = 0
     },
     {
         .name = "definitivamente_nao_um_virus",
-        .cpu_burst = 400,
+        .cpu_burst = 30,
         .priority = 0,
         .waiting_time = 0
     },
     {
         .name = "Visual Studio Code",
-        .cpu_burst = 300,
+        .cpu_burst = 9,
         .priority = 1,
         .waiting_time = 0
     }
