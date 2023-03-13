@@ -111,18 +111,26 @@ Process remove_from_end(pdeque_t *q)
     if(!is_empty(q))
     {
         item_t *tmp = q->start;
-
-        // find penultimate item of queue
-        while (tmp->next->next != NULL)
+        if (tmp->next == NULL) // case deque has only one element
         {
-            tmp = tmp->next;
+            Process p = q->end->proc;
+            free(q->end);
+            q->start = q->end = NULL;
+            return p;
+        } else {
+            // find penultimate item of queue
+            while (tmp->next->next != NULL)
+            {
+                tmp = tmp->next;
+            }
+            Process p = q->end->proc;
+            free(q->end);
+            tmp->next = NULL;
+            q->end = tmp;
+            return p;
         }
-        Process p = q->end->proc;
-        free(q->end);
-        tmp->next = NULL;
-        q->end = tmp;
-        return p;
     }
+    // case empty deque
     Process invalid = {
         .name = INVALID_PROCESS_NAME,
         .cpu_burst = INVALID_PROCESS_BURST,
