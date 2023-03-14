@@ -1,3 +1,11 @@
+/*
+ * Some processes to use in main.
+ * Created for demonstration pourposes only.
+ *
+ * Pedro Moreno Silva.
+ * Date: 14/03/2023
+ * contact:    pedro.moreno@aluno.ufabc.edu.br
+ */
 #include "process.h"
 
 int some_processes_len = 8;

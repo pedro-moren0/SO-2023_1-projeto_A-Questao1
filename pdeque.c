@@ -1,3 +1,11 @@
+/*
+ * Priority Double-Ended Queue (PDeque) implementation
+ * (implemented with linked lists).
+ *
+ * Pedro Moreno Silva.
+ * Date: 14/03/2023
+ * contact:    pedro.moreno@aluno.ufabc.edu.br
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,13 +14,24 @@
 #include "pdeque.h"
 #include "process.h"
 
-
+/*
+ * Struct implementation of an item in the
+ * queue. The proc attribute is the Process the item
+ * holds, and the next attribute is a pointer that points
+ * to the next item in the sequence.
+ */
 typedef struct item_t
 {
     Process proc;
     struct item_t *next;
 } item_t;
 
+/*
+ * Struct implementation of a PDeque.
+ * The priority attribute is the priority associated with
+ * that list, and the start and end attributes are pointers to the
+ * start and end of the queue.
+ */
 typedef struct pdeque_t
 {
     int priority;
@@ -20,7 +39,12 @@ typedef struct pdeque_t
 } pdeque_t;
 
 
-
+/*
+ * Creates the root pointer to the PDeque via malloc.
+ *
+ * Params: the PDeque priority
+ * Return: the root pointer to the PDeque
+ */
 pdeque_t * create_empty_pdeque(int priority)
 {
     pdeque_t *q = malloc(sizeof(pdeque_t));
@@ -32,6 +56,13 @@ pdeque_t * create_empty_pdeque(int priority)
     return q;
 }
 
+/*
+ * Creates the an item of the PDeque via malloc.
+ *
+ * Params: the Process paramenters (name, cpu burst duration,
+ *         priority and its waiting time)
+ * Return: a pointer to the item created
+ */
 item_t * create_item(char* name, int burst, int priority, int waiting_time)
 {
     item_t *item = malloc(sizeof(item_t));
@@ -44,9 +75,17 @@ item_t * create_item(char* name, int burst, int priority, int waiting_time)
     return item;
 }
 
+/*
+ * Frees the PDeque.
+ *
+ * Params: the root pointer to the PDeque
+ * Return: None
+ */
 void free_pdeque(pdeque_t *q)
 {
     item_t *current = q->start, *previous = NULL;
+
+    // first frees items, them frees root
     while(current != NULL)
     {
         previous = current;
@@ -56,11 +95,23 @@ void free_pdeque(pdeque_t *q)
     free(q);
 }
 
+/*
+ * Checks if the PDeque is empty.
+ *
+ * Params: the root pointer to the PDeque
+ * Return: 1 if empty, 0 otherwise
+ */
 int is_empty(pdeque_t *q)
 {
     return q->start == NULL;
 }
 
+/*
+ * Formated print to the PDeque and its contents.
+ *
+ * Params: the root pointer to the PDeque
+ * Return: None
+ */
 void print_pdeque(pdeque_t *q)
 {
     item_t *tmp = q->start;
@@ -77,6 +128,12 @@ void print_pdeque(pdeque_t *q)
     }
 }
 
+/*
+ * Adds a Process to the end (last pos) of the PDeque.
+ *
+ * Params: the root pointer to the PDeque, the Process to be added
+ * Return: None
+ */
 void add_to_end(pdeque_t *q, Process p)
 {
     item_t *novo = create_item(p.name, p.cpu_burst, p.priority, p.waiting_time);
@@ -92,6 +149,12 @@ void add_to_end(pdeque_t *q, Process p)
     }
 }
 
+/*
+ * Adds a Process to the start (first pos) of the PDeque.
+ *
+ * Params: the root pointer to the PDeque, the Process to be added
+ * Return: None
+ */
 void add_to_start(pdeque_t *q, Process p) {
     item_t *novo = create_item(p.name, p.cpu_burst, p.priority, p.waiting_time);
     if(is_empty(q))
@@ -106,6 +169,15 @@ void add_to_start(pdeque_t *q, Process p) {
     }
 }
 
+/*
+ * Removes the Process at the end (last pos) of the PDeque.
+ * If empty, returns a Process with invalid fields, and does
+ * nothing to the provided PDeque.
+ *
+ * Params: the root pointer to the PDeque
+ * Return: the removed Process if the PDeque is not empty, and
+ *         a invalid Process otherwise.
+ */
 Process remove_from_end(pdeque_t *q)
 {
     if(!is_empty(q))
@@ -140,6 +212,15 @@ Process remove_from_end(pdeque_t *q)
     return invalid;
 }
 
+/*
+ * Removes the Process at the start (first pos) of the PDeque.
+ * If empty, returns a Process with invalid fields, and does
+ * nothing to the provided PDeque.
+ *
+ * Params: the root pointer to the PDeque, the Process to be added
+ * Return: the removed Process if the PDeque is not empty, and
+ *         a invalid Process otherwise.
+ */
 Process remove_from_start(pdeque_t *q)
 {
     if(!is_empty(q))
